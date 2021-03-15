@@ -1,6 +1,31 @@
 .TimeRange {
   position: absolute;
-  min-width: 10px;
+  min-width: 20px;
   height: 32px;
   background-color: greenyellow;
+}
+
+.TimeRange:hover .leftResize, .TimeRange:hover .rightResize {
+  display: block;
+}
+
+.leftResize, .rightResize {
+  position: absolute;
+  width: 12px;
+  top: 8px;
+  background-color: darksalmon;
+  height: 16px;
+  display: none;
+}
+
+.leftResize:hover, .rightResize:hover {
+  display: block;
+}
+
+.leftResize {
+  left: -6px;
+}
+
+.rightResize {
+  right: -6px;
 }
