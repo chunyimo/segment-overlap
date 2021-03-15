@@ -1,0 +1,7 @@
+.TimeTrack {
+  height: 40px;
+  position: relative;
+  background-color: gray;
+  box-sizing: border-box;
+  border-bottom: 8px solid white;
+}

@@ -1,0 +1,6 @@
+.TimeRange {
+  position: absolute;
+  min-width: 10px;
+  height: 32px;
+  background-color: greenyellow;
+}
