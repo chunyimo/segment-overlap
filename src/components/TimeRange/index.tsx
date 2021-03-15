@@ -74,7 +74,11 @@ const TimeRange: React.FC<ITimeRangeProps> = (props) => {
         if (side === 'left') {
           console.info('mouseDiffx: ', mouseDiffx);
           // @ts-ignore
-          if (divWidth >= 20) {
+          if (
+            timeRangeRef.current?.getBoundingClientRect().width > 20 ||
+            mouseDiffx < 0
+          ) {
+            console.info('div width: ', divWidth);
             // @ts-ignore
             newDivLeft = divLeft + mouseDiffx;
           }
@@ -82,6 +86,10 @@ const TimeRange: React.FC<ITimeRangeProps> = (props) => {
           if (newDivLeft >= 0) {
             // @ts-ignore
             newDivWidth = divWidth - mouseDiffx;
+            console.info(
+              `divWidth - mouseDiffx: ${divWidth} - ${mouseDiffx} = `,
+              newDivWidth
+            );
             if (newDivWidth < 20) {
               newDivWidth = 20;
             }

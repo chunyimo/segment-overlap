@@ -16,6 +16,7 @@
   background-color: darksalmon;
   height: 16px;
   display: none;
+  user-select: none;
 }
 
 .leftResize:hover, .rightResize:hover {
