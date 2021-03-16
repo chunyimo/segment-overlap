@@ -23,6 +23,7 @@ export interface ITimeTrackProps {
   conflictRange: Array<[number, number]>;
   timeTrackListContainerRef: RefObject<HTMLDivElement>;
   children?: ReactNode;
+  catchHandler: (type: string, payload?: {}) => void;
 }
 
 const PREFIX = "TimeTrack";
@@ -33,6 +34,7 @@ const TimeTrack: React.FC<ITimeTrackProps> = (props) => {
     updateConflictRange,
     timeRange,
     updateTimeRanges,
+    catchHandler,
   } = props;
   useEffect(() => {
     const conflict = calculateConflict(
@@ -63,6 +65,7 @@ const TimeTrack: React.FC<ITimeTrackProps> = (props) => {
   return (
     <div ref={timeTrackRef} className={PREFIX}>
       <TimeRange
+        catchHandler={catchHandler}
         key={timeRange.id}
         updateTimeRanges={updateTimeRanges}
         timeRange={timeRange}

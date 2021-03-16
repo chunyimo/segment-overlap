@@ -24,10 +24,22 @@ const TimeTrackList: React.FC<ITimeTrackListProps> = (props) => {
   const timeTrackListContainerRef = useRef<HTMLDivElement>(null);
   const [timeRanges, setTimeRanges] = useState(initTimeRange);
   const [conflictRange, setConflictRange] = useState<any>([]);
+  const [moveConflictRange, setMoveConflictRange] = useState<any>([]);
   const [timeScale, setTimeScale] = useState<number[]>(initTimeScale);
   const updateConflictRange = useCallback((_conflictRange: number[]) => {
     setConflictRange(_conflictRange);
   }, []);
+  const [cachedChangeInfo, setCachedChangeInfo] = useState<{ id: string }>();
+  const changedTimeRangeId = useRef<string>("");
+  const moveActionTimeScale = useRef<number[]>([]);
+  const timeScaleRef = useRef<number[]>(timeScale);
+  const timeRangesRef = useRef<
+    Array<{
+      id: string;
+      start: number;
+      duration: number;
+    }>
+  >();
   const updateTimeRanges = useCallback(
     (
       _timeRange: { id: string; start: number; duration: number },
@@ -43,6 +55,7 @@ const TimeTrackList: React.FC<ITimeTrackListProps> = (props) => {
             console.log("update", _timeRange);
             const _timeRanges = [...timeRanges];
             _timeRanges[index] = _timeRange;
+            changedTimeRangeId.current = _timeRange.id;
             return _timeRanges;
           }
           return timeRanges;
@@ -70,20 +83,55 @@ const TimeTrackList: React.FC<ITimeTrackListProps> = (props) => {
     },
     []
   );
-  // 计算 timeScale
+
   useEffect(() => {
-    const _timeScale = [...initTimeScale];
-    for (let i = 0; i < timeRanges.length; i++) {
-      const timeRange = timeRanges[i];
-      for (
-        let j = timeRange.start;
-        j < timeRange.start + timeRange.duration;
-        j++
-      ) {
-        _timeScale[j] += 1;
+    timeRangesRef.current = timeRanges;
+  }, [timeRanges]);
+  // 计算 timeScale
+  const catchHandler = useCallback((action: string, payload?: any) => {
+    if (action === "move") {
+      const timeRangeId = payload?.timeRange?.timeRangeId;
+      if (timeRangeId && timeRangesRef.current) {
+        const timeRanges = timeRangesRef.current;
+        const _timeScale = [...initTimeScale];
+        for (let i = 0; i < timeRanges.length; i++) {
+          const timeRange = timeRanges[i];
+          if (timeRange.id !== timeRangeId) {
+            for (
+              let j = timeRange.start;
+              j < timeRange.start + timeRange.duration;
+              j++
+            ) {
+              _timeScale[j] += 1;
+            }
+          }
+        }
+        moveActionTimeScale.current = _timeScale;
       }
     }
-    setTimeScale(_timeScale);
+  }, []);
+  useEffect(() => {
+    const container = document.querySelector("#TrackListContainer");
+    if (container) {
+      console.info("scrollTop: ", container.scrollTop);
+      const startIndex =
+        Math.floor(container.scrollTop / 32) - 2 < 0
+          ? 0
+          : Math.floor(container.scrollTop / 32) - 2;
+      const endIndex = Math.min(startIndex + 25, timeRanges.length);
+      const _timeScale = [...initTimeScale];
+      for (let i = 0; i < timeRanges.length; i++) {
+        const timeRange = timeRanges[i];
+        for (
+          let j = timeRange.start;
+          j < timeRange.start + timeRange.duration;
+          j++
+        ) {
+          _timeScale[j] += 1;
+        }
+      }
+      setTimeScale(_timeScale);
+    }
   }, [timeRanges]);
 
   // 计算冲突区域
@@ -128,6 +176,7 @@ const TimeTrackList: React.FC<ITimeTrackListProps> = (props) => {
         {timeRanges.map((time, index) => {
           return (
             <TimeTrack
+              catchHandler={catchHandler}
               updateTimeRanges={updateTimeRanges}
               timeRange={time}
               updateConflictRange={updateConflictRange}

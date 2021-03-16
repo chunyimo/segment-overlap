@@ -28,6 +28,7 @@ export interface ITimeRangeProps {
   start?: number;
   end?: number;
   children?: ReactNode;
+  catchHandler: (type: string, payload?: {}) => void;
 }
 
 const PREFIX = "TimeRange";
@@ -41,6 +42,7 @@ const TimeRange: React.FC<ITimeRangeProps> = (props) => {
     updateConflictRange,
     timeRange,
     updateTimeRanges,
+    catchHandler,
   } = props;
   const [timeInfo, setTimeInfo] = useState<{ start: number; duration: number }>(
     { start: timeRange.start, duration: timeRange.duration }
@@ -72,7 +74,7 @@ const TimeRange: React.FC<ITimeRangeProps> = (props) => {
           timeRangeItem.style.left = left + "px";
           setTimeInfo((time) => ({ ...time, start: left }));
         }
-      }, 1),
+      }, 100),
     []
   );
   // register move
@@ -92,6 +94,7 @@ const TimeRange: React.FC<ITimeRangeProps> = (props) => {
         }
       });
       timeRangeItem.addEventListener("mousedown", function (e) {
+        catchHandler("move", { timeRange });
         setCachedTimeInfo({ ...timeInfo });
         offsetX = e.offsetX;
         moveWidth = timeRangeItem.getBoundingClientRect().width;
@@ -101,6 +104,7 @@ const TimeRange: React.FC<ITimeRangeProps> = (props) => {
       });
       document.addEventListener("mouseup", function () {
         if (down) {
+          catchHandler("clear move");
           down = false;
         }
       });
