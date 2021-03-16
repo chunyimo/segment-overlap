@@ -30,3 +30,11 @@
 .rightResize {
   right: -6px;
 }
+
+.TimeRange-canvas {
+  position: absolute;
+  height: 32px;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+}

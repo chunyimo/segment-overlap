@@ -1,54 +1,10 @@
 export const timeTrackList = [
   {
     start: 0,
-    end: 8,
+    duration: 20,
   },
   {
     start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
-  },
-  {
-    start: 0,
-    end: 8,
+    duration: 20,
   },
 ];

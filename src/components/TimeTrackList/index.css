@@ -8,3 +8,10 @@
 .TimeTrackList-timeTrackListContainer {
   height: 100%;
 }
+
+.TimeTrackList-add {
+  position: fixed;
+  z-index: 1000;
+  right: 120px;
+  top: 40px;
+}
